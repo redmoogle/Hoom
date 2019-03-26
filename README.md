@@ -18,7 +18,7 @@ Change Log V1.2.2.0(Alpha Release)
   
  Change LogV2.0.2.1(Experemental:VISUAL)
   * Made a super basic GUI with functional code
-  * TODO: Learn tkinter
+  * TODO: Learn Byond/Dream Maker
   * TODO: Improve balance
   * TODO: Make Zombies move faster
   * TODO: Simplify Input
