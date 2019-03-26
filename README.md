@@ -3,8 +3,8 @@ A generic zombie shooter in the making using pythonic code.
 
 
 Current Experments:
-  * Making Hoom GUI Based(Using tkinter module)
-  * Using Classes in Hoom
+  * Making Hoom GUI Based(Porting to byond)
+  * Using Classes in Hoom Terminal
   * Improving Code Efficency
   * Reducing Vars
   * Reducing Line Count
