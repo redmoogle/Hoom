@@ -1,0 +1,22 @@
+Hoom Balance/Weapon Tracking
+
+5.56mm
+	Damage: 3
+	Availability: High
+	Traits: 1/5 chance to stun for 0.5 seconds
+	Mag Size: 10
+5.56mm HE
+	Damage: 9
+	Availability: Low
+	Traits: 4/5 Chance to stun for 1 second
+	Mag Size: 10
+5.56mm AP
+	Damage: 4
+	Availability: Slightly Low
+	Traits: Can pen armor, Can hit multiple mobs
+	Mag Size: 10
+5.56 Extended
+	Damage: 3
+	Availability: Rare
+	Traits: 1/5 chance to stun for 0.5 seconds
+	Mag Size: 20
