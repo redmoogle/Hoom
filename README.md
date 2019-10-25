@@ -3,11 +3,18 @@ A generic zombie shooter in the making using pythonic code.
 
 
 Current Experments:
-  * Making Hoom GUI Based(Porting to byond)
   * Using Classes in Hoom Terminal
   * Improving Code Efficency
   * Reducing Vars
   * Reducing Line Count
+
+Change Log V2.1.4.0(Alpha Release)
+  * Code Overhaul
+   * No globals
+   * Much more readable code
+  * Gernades removed
+  * You can now shoot zombies in the area
+  * Action system works much better
   
 Change Log V1.2.2.0(Alpha Release)
   * Correct use of globals
