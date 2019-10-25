@@ -3,10 +3,7 @@ A generic zombie shooter in the making using pythonic code.
 
 
 Current Experments:
-  * Using Classes in Hoom Terminal
-  * Improving Code Efficency
-  * Reducing Vars
-  * Reducing Line Count
+  * None
 
 Change Log V2.1.4.0(Alpha Release)
   * Code Overhaul
