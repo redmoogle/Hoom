@@ -5,6 +5,10 @@ A generic zombie shooter in the making using pythonic code.
 Current Experments:
   * None
 
+Change Log V2.1.4.1(Alpha Release)
+  * General Bug Fixes
+  * A small amount of code refactoring
+
 Change Log V2.1.4.0(Alpha Release)
   * Code Overhaul
    * No globals
