@@ -20,7 +20,21 @@ def create_multikey_dict(listinput):
             templist.append(tuple([associated_input, key])) # tuples is used to make the dictonary
     return dict(templist) # turn the list of tuples into a dictonary
 
-class Core:
+def format_actions(listinput):
+    """
+    Converts the actions from self.action into a into a neat string.
+    Grabs from the first element in each sublist
+    """
+    _counter = 0    # for formatting actions
+    _formatted = ''
+    for unformatted in listinput:
+        _counter += 1
+        _formatted += f'{unformatted[0]}'
+        if(_counter+1 <= int(len(listinput))):
+            _formatted += ", "
+    return _formatted
+
+class Game:
     """
     Game Instance Class
     """
@@ -28,12 +42,22 @@ class Core:
         """
         Self is used, for when multiplayer 'might' come along
         """
-        self.HP = 100
+        # Converts keywords to one unified output
+        self.actions = [
+            ['shoot', 'kill', 'shoot'],                 # shoot that zombie
+            ['switch', 'swap', 'change', 'switch'],     # change the weapon
+            ['use', 'consume', 'use'],                  # use an item
+            ['examine', 'look', 'examine'],             # check the area out
+            ['loot', 'check', 'loot']                   # gather the good stuff
+        ]
+
+        self.hp = 100        # HP of the player
         self.zombies = []    # Holds a list with a reference to the zombie: [Type, Dist, HP, Damage, Speed]
         self.location = {}   # Dictonary related to the location
         self.ammo = {}       # Reference of ammo types
         self.items = {}      # Stuff the player has
         self.__generator()   # generate zombies and a location
+        self._actions = create_multikey_dict(self.actions) # create internal actions
         self.selected = None # Selected weapon for better actions
 
     def __zombiegen(self, amount):
@@ -75,6 +99,24 @@ class Core:
         self.location['high-cal'] = random.randint(0, 10)
         self.zombies = self.__zombiegen(random.randint(0, 10)) # Empty it before generating
 
+    def __actionswitch(self, action):
+        """
+        Switches between action keywords
+        """
+        # Actions: shoot, switch, use, examine, loot
+        if(action == 'shoot'):
+            pass
+        elif(action == 'switch'):
+            pass
+        elif(action == 'use'):
+            pass
+        elif(action == 'examine'):
+            pass
+        elif(action == 'loot'):
+            pass
+        else:
+            raise Exception('Non-Switch Word provided')
+
     def __shootgun(self, bullets=1, damage=3):
         """
         Calculates damage and removes zombies
@@ -100,34 +142,22 @@ class Core:
             return False
 
     def handle_input(self):
-        actions = [
-            ['shoot', 'kill', 'shoot'],                 # shoot that zombie
-            ['switch', 'swap', 'change', 'switch'],     # change the weapon
-            ['use', 'consume', 'use'],                  # use an item
-            ['examine', 'look', 'examine'],             # check the area out
-            ['loot', 'check', 'loot']                   # gather the good stuff
-        ]
-        _counter = 0    # for formatting actions
-        _formatted = ''
-        for key in actions:
-            _counter += 1
-            _formatted += key[len(key)-1] # last value is the associated output key
-            if(_counter+1 <= int(len(actions))):
-                _formatted += ", "
-        actions = create_multikey_dict(actions) # turn it into an associative list
-        userinput = ((input(f'Avaliable Actions: {_formatted}...\n')).lower()).split()
+        """
+        Handles the input from the user
+        """
+        userinput = ((input(f'Avaliable Actions: {format_actions(self.actions)}...\n')).lower()).split()
         action = None # what have they chosen to do
         for split_actions in userinput:
-            if(split_actions in actions):
-                action = actions[split_actions]
+            if(split_actions in self._actions):
+                action = self._actions[split_actions]
                 break
-            userinput = ''.join(userinput)
-            return print(f'You have chose something invalid... ({userinput})')
+            return print(f'You have chose something invalid... ({"".join(userinput)})')
 
         print(f'You have chose to {action}')
+        self.__actionswitch(action)
         
 
-Game = Core()
+Game = Game()
 Game.__init__()
 Game.handle_input()
 
