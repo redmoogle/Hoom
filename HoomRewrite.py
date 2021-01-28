@@ -5,20 +5,7 @@ import sys
 import os
 import re
 import time
-
-def create_multikey_dict(listinput):
-    """
-    Create a dictonary with muliple keys to one output
-    Last item in the list is the output from the keys
-    """
-    key = '' # thing to map all the keys to
-    templist = [] # holder for the tuples
-    for associated_list in listinput: # grab each sublist
-        key = associated_list[len(associated_list)-1] # grab the last item to associate it to a common value
-        associated_list.pop(len(associated_list)-1) # and also remove it
-        for associated_input in associated_list: # grab all other values to make the 'key' to common value
-            templist.append(tuple([associated_input, key])) # tuples is used to make the dictonary
-    return dict(templist) # turn the list of tuples into a dictonary
+from multi_key_dict import multi_key_dict
 
 def format_actions(listinput):
     """
@@ -42,13 +29,13 @@ class Game:
         """
         Self is used, for when multiplayer 'might' come along
         """
-        # Converts keywords to one unified output
+        # Converts keywords to one unified output first is the one that others get converted to
         self.actions = [
-            ['shoot', 'kill', 'shoot'],                 # shoot that zombie
-            ['switch', 'swap', 'change', 'switch'],     # change the weapon
-            ['use', 'consume', 'use'],                  # use an item
-            ['examine', 'look', 'examine'],             # check the area out
-            ['loot', 'check', 'loot']                   # gather the good stuff
+            ['shoot', 'kill'],      # shoot that zombie
+            ['switch', 'swap'],     # change the weapon
+            ['use', 'consume'],     # use an item
+            ['examine', 'look'],    # check the area out
+            ['loot', 'check']       # gather the good stuff
         ]
 
         self.hp = 100        # HP of the player
@@ -57,8 +44,11 @@ class Game:
         self.ammo = {}       # Reference of ammo types
         self.items = {}      # Stuff the player has
         self.__generator()   # generate zombies and a location
-        self._actions = create_multikey_dict(self.actions) # create internal actions
         self.selected = None # Selected weapon for better actions
+
+        self.actionsdict = multi_key_dict() # generate the assosative list
+        for action in self.actions: # loop through the action list above
+            self.actionsdict[action] = action[0] # insert the keyword converter list
 
     def __zombiegen(self, amount):
         """
@@ -148,8 +138,8 @@ class Game:
         userinput = ((input(f'Avaliable Actions: {format_actions(self.actions)}...\n')).lower()).split()
         action = None # what have they chosen to do
         for split_actions in userinput:
-            if(split_actions in self._actions):
-                action = self._actions[split_actions]
+            if(split_actions in self.actionsdict):
+                action = self.actionsdict[split_actions]
                 break
             return print(f'You have chose something invalid... ({"".join(userinput)})')
 
