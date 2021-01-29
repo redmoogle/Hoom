@@ -23,7 +23,7 @@ def format_actions(listinput):
 
 class Game:
     """
-    Game Instance Class
+    Holds all the variables and functions related to controlling the game
     """
     def __init__(self):
         """
@@ -38,13 +38,15 @@ class Game:
             ['loot', 'check']       # gather the good stuff
         ]
 
-        self.hp = 100        # HP of the player
-        self.zombies = []    # Holds a list with a reference to the zombie: [Type, Dist, HP, Damage, Speed]
-        self.location = {}   # Dictonary related to the location
-        self.ammo = {}       # Reference of ammo types
-        self.items = {}      # Stuff the player has
-        self.__generator()   # generate zombies and a location
-        self.selected = None # Selected weapon for better actions
+        self.hp = 100               # HP of the player
+        self.zombies = []           # Holds a list with a reference to the zombie: [Type, Dist, HP, Damage, Speed]
+        self.location = {}          # Dictonary related to the location
+        self.ammo = {}              # Reference of ammo types
+        self.items = {}             # Stuff the player has
+        self.__generator()          # generate zombies and a location
+
+        # Selected weapon for better actions
+        self.selected = {'name': 'Tokchiva 9mm', 'bullets': 1, 'damage': 3}
 
         self.actionsdict = multi_key_dict() # generate the assosative list
         for action in self.actions: # loop through the action list above
@@ -63,7 +65,7 @@ class Game:
         ]
         for _ in range(amount):
             random.shuffle(zombies)
-            _zombies += zombies[0]
+            _zombies.append(zombies[0])
         
         return _zombies
 
@@ -89,24 +91,6 @@ class Game:
         self.location['high-cal'] = random.randint(0, 10)
         self.zombies = self.__zombiegen(random.randint(0, 10)) # Empty it before generating
 
-    def __actionswitch(self, action):
-        """
-        Switches between action keywords
-        """
-        # Actions: shoot, switch, use, examine, loot
-        if(action == 'shoot'):
-            pass
-        elif(action == 'switch'):
-            pass
-        elif(action == 'use'):
-            pass
-        elif(action == 'examine'):
-            pass
-        elif(action == 'loot'):
-            pass
-        else:
-            raise Exception('Non-Switch Word provided')
-
     def __shootgun(self, bullets=1, damage=3):
         """
         Calculates damage and removes zombies
@@ -118,18 +102,20 @@ class Game:
 
         for zombie in self.zombies: # this is used to grab the first closest zombie
             _itercalc += 1
-            if(zombie[1] >= 2):
+            print(zombie)
+            if(zombie[1] <= 3):
                 _found = True # used to make sure we did find the zombie so we dont shoot a null/out of range zombie
                 break
+            else:
+                return 'You try to find something to shoot but you dont see anything close enough'
         
-        if(_found):
-            for _ in range(bullets):
-                zombie = self.zombies[_itercalc] # 'reference' to the zombie for manipulation
-                zombie[2] = max(0, zombie[2]-damage)
-            if(zombie[2] <= 0): # <= incase it somehow goes negative
-                self.zombies.pop(_itercalc) # Pop goes the zombie!
-        else:
-            return False
+        for _ in range(bullets):
+            zombie = self.zombies[_itercalc] # 'reference' to the zombie for manipulation
+            zombie[2] = max(0, zombie[2]-damage)
+        if(zombie[2] <= 0): # <= incase it somehow goes negative
+            self.zombies.pop(_itercalc) # Pop goes the zombie!
+            return f'The {zombie[0]} falls over on to the ground...'
+        return f'You hit the {zombie[0]} {bullets} times, dealing {bullets*damage} damage to them'
 
     def handle_input(self):
         """
@@ -145,9 +131,33 @@ class Game:
 
         print(f'You have chose to {action}')
         self.__actionswitch(action)
-        
+
+    def __actionswitch(self, action):
+        """
+        Switches between action keywords
+        """
+        # Actions: shoot, switch, use, examine, loot
+        result = False # used for comparing to see if something happened
+        if(action == 'shoot'):
+            result = self.__shootgun()
+        elif(action == 'switch'):
+            pass
+        elif(action == 'use'):
+            pass
+        elif(action == 'examine'):
+            pass
+        elif(action == 'loot'):
+            pass
+        else:
+            raise Exception('Non-Switch Word provided')
+
+        if(result is not False):
+            print(result)
+        else:
+            print('nothing happened')
 
 Game = Game()
 Game.__init__()
-Game.handle_input()
+while(True):
+    Game.handle_input()
 
