@@ -42,11 +42,15 @@ class Game:
         self.zombies = []           # Holds a list with a reference to the zombie: [Type, Dist, HP, Damage, Speed]
         self.location = {}          # Dictonary related to the location
         self.ammo = {}              # Reference of ammo types
-        self.items = {}             # Stuff the player has
         self.__generator()          # generate zombies and a location
 
+        # Reference of ammo types
+        self.ammo = {'9mm': 20, 'buckshot': 10}
+        # Stuff the player has
+        # Weapons List: [name, bullets per shot, damage, ammotype]
+        self.items = {'Weapons': [['Tokchiva 9mm', 1, 7, '9mm'], ['Lanska Buckshotgun', 5, 3, 'buckshot']]}
         # Selected weapon for better actions
-        self.selected = {'name': 'Tokchiva 9mm', 'bullets': 1, 'damage': 3}
+        self.selected = ['Tokchiva 9mm', 1, 3]
 
         self.actionsdict = multi_key_dict() # generate the assosative list
         for action in self.actions: # loop through the action list above
@@ -91,7 +95,7 @@ class Game:
         self.location['high-cal'] = random.randint(0, 10)
         self.zombies = self.__zombiegen(random.randint(0, 10)) # Empty it before generating
 
-    def __shootgun(self, bullets=1, damage=3):
+    def __shootgun(self):
         """
         Calculates damage and removes zombies
         """
@@ -99,7 +103,10 @@ class Game:
         _itercalc = -1      # for removing from the list
         _rlist = None       # Contains what happened to zombies in a list
         _found = False      # has a zombie been found
-
+        if(self.ammo[self.selected[3]] <= 0):
+            return f'You do not have enough {self.selected[3]} ammo'
+        # use one bullet(for now)
+        self.ammo[self.selected[3]] -= 1
         for zombie in self.zombies: # this is used to grab the first closest zombie
             _itercalc += 1
             print(zombie)
@@ -109,13 +116,13 @@ class Game:
             else:
                 return 'You try to find something to shoot but you dont see anything close enough'
         
-        for _ in range(bullets):
+        for _ in range(self.selected[1]):
             zombie = self.zombies[_itercalc] # 'reference' to the zombie for manipulation
-            zombie[2] = max(0, zombie[2]-damage)
+            zombie[2] = max(0, zombie[2]-self.selected[2])
         if(zombie[2] <= 0): # <= incase it somehow goes negative
             self.zombies.pop(_itercalc) # Pop goes the zombie!
             return f'The {zombie[0]} falls over on to the ground...'
-        return f'You hit the {zombie[0]} {bullets} times, dealing {bullets*damage} damage to them'
+        return f'You hit the {zombie[0]} {self.selected[1]} times, dealing {self.selected[1]*self.selected[2]} damage to them'
 
     def handle_input(self):
         """
